@@ -179,6 +179,8 @@ body {
     letter-spacing: 0.05em;
     white-space: nowrap;
     position: relative;
+    cursor: pointer;
+    user-select: none;
 }
 
 #word-before,
@@ -238,6 +240,32 @@ body {
     color: var(--text-dim);
     min-width: 3rem;
     text-align: right;
+}
+
+/* ============================================
+   Stats
+   ============================================ */
+
+#stats-container {
+    width: 100%;
+    max-width: 600px;
+    margin-bottom: 1.5rem;
+    text-align: center;
+}
+
+#stats-display {
+    font-size: 0.9rem;
+    color: var(--text-dim);
+    padding: 0.5rem;
+}
+
+#time-remaining {
+    color: var(--text);
+    font-weight: 500;
+}
+
+#words-remaining {
+    color: var(--text-dim);
 }
 
 /* ============================================
@@ -359,4 +387,24 @@ body {
 
 .hidden {
     display: none !important;
+}
+
+/* ============================================
+   Visit Counter
+   ============================================ */
+
+.visit-counter {
+    position: absolute;
+    bottom: 20px;
+    left: 0;
+    right: 0;
+    text-align: center;
+    font-size: 0.75rem;
+    color: var(--text-dim);
+    opacity: 0.6;
+}
+
+#visit-count {
+    color: var(--accent);
+    font-weight: 500;
 }

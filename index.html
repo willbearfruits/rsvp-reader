@@ -8,7 +8,7 @@
     <meta name="description" content="RSVP Speed Reader with ORP highlighting">
 
     <!-- Security Headers -->
-    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' https://cdnjs.cloudflare.com; style-src 'self' 'unsafe-inline'; font-src 'self'; img-src 'self' data:; connect-src 'self'; worker-src 'self';">
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' https://cdnjs.cloudflare.com; style-src 'self' 'unsafe-inline'; font-src 'self'; img-src 'self' data:; connect-src 'self' https://api.countapi.xyz; worker-src 'self';">
     <meta http-equiv="X-Frame-Options" content="DENY">
     <meta http-equiv="X-Content-Type-Options" content="nosniff">
     <meta name="referrer" content="strict-origin-when-cross-origin">
@@ -39,6 +39,10 @@
                 <div class="spinner"></div>
                 <p>Processing...</p>
             </div>
+
+            <div id="visit-counter" class="visit-counter">
+                <span id="visit-count">Loading...</span> readers
+            </div>
         </div>
 
         <!-- Reader Screen -->
@@ -55,6 +59,12 @@
                 <span id="progress-text">0%</span>
             </div>
 
+            <div id="stats-container" class="hidden">
+                <div id="stats-display">
+                    <span id="time-remaining">--:--</span> • <span id="words-remaining">0/0 words</span>
+                </div>
+            </div>
+
             <div id="controls">
                 <button id="back-btn" class="ctrl-btn" title="Back 10 words">◀◀</button>
                 <button id="play-btn" class="ctrl-btn play" title="Play/Pause">▶</button>
@@ -65,6 +75,7 @@
                     <span id="wpm-display">150 WPM</span>
                 </div>
 
+                <button id="stats-toggle-btn" class="ctrl-btn" title="Toggle reading time">🕐</button>
                 <button id="close-btn" class="ctrl-btn" title="Close">✕</button>
             </div>
         </div>

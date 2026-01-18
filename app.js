@@ -18,6 +18,7 @@ const loading = document.getElementById('loading');
 const wordBefore = document.getElementById('word-before');
 const wordOrp = document.getElementById('word-orp');
 const wordAfter = document.getElementById('word-after');
+const wordDisplay = document.getElementById('word-display');
 const progressBar = document.getElementById('progress-bar');
 const progressText = document.getElementById('progress-text');
 
@@ -28,6 +29,15 @@ const closeBtn = document.getElementById('close-btn');
 const wpmSlider = document.getElementById('wpm-slider');
 const wpmDisplay = document.getElementById('wpm-display');
 
+const statsContainer = document.getElementById('stats-container');
+const statsToggleBtn = document.getElementById('stats-toggle-btn');
+const timeRemaining = document.getElementById('time-remaining');
+const wordsRemaining = document.getElementById('words-remaining');
+
+// State
+let currentFile = null;
+let showStats = false;
+
 // Timing Controller
 const timer = createTimingController({
     wpm: 150,
@@ -36,6 +46,31 @@ const timer = createTimingController({
     onProgress: updateProgress,
     onComplete: onReadingComplete
 });
+
+// ============================================
+// Bookmark System
+// ============================================
+
+function getFileId(file) {
+    // Create unique ID from filename and size
+    return `${file.name}_${file.size}`;
+}
+
+function saveBookmark(file, position) {
+    const fileId = getFileId(file);
+    localStorage.setItem(`bookmark_${fileId}`, position.toString());
+}
+
+function loadBookmark(file) {
+    const fileId = getFileId(file);
+    const saved = localStorage.getItem(`bookmark_${fileId}`);
+    return saved ? parseInt(saved) : 0;
+}
+
+function clearBookmark(file) {
+    const fileId = getFileId(file);
+    localStorage.removeItem(`bookmark_${fileId}`);
+}
 
 // ============================================
 // File Handling
@@ -108,10 +143,20 @@ async function processFile(file) {
             throw new Error('No text content found in file');
         }
 
+        currentFile = file;
         timer.load(words);
+
+        // Load bookmark and resume from saved position
+        const savedPosition = loadBookmark(file);
+        if (savedPosition > 0) {
+            timer.seek(savedPosition);
+        }
+
         showReader();
-        displayWord(words[0], 0);
-        updateProgress(0, words.length);
+        const currentIndex = timer.getCurrentIndex();
+        displayWord(words[currentIndex], currentIndex);
+        updateProgress(currentIndex, words.length);
+        updateStats();
 
     } catch (error) {
         console.error('Error processing file:', error);
@@ -136,6 +181,42 @@ function updateProgress(current, total) {
     const percent = total > 0 ? Math.round((current / total) * 100) : 0;
     progressBar.style.setProperty('--progress', `${percent}%`);
     progressText.textContent = `${percent}%`;
+
+    // Save bookmark
+    if (currentFile) {
+        saveBookmark(currentFile, current);
+    }
+
+    // Update stats
+    updateStats();
+}
+
+function updateStats() {
+    if (!showStats) return;
+
+    const current = timer.getCurrentIndex();
+    const total = timer.getWordCount();
+    const wpm = timer.getWPM();
+
+    // Calculate time remaining
+    const wordsLeft = total - current;
+    const minutesLeft = wordsLeft / wpm;
+    const hours = Math.floor(minutesLeft / 60);
+    const minutes = Math.floor(minutesLeft % 60);
+    const seconds = Math.floor((minutesLeft * 60) % 60);
+
+    // Format time
+    let timeStr;
+    if (hours > 0) {
+        timeStr = `${hours}h ${minutes}m`;
+    } else if (minutes > 0) {
+        timeStr = `${minutes}m ${seconds}s`;
+    } else {
+        timeStr = `${seconds}s`;
+    }
+
+    timeRemaining.textContent = timeStr;
+    wordsRemaining.textContent = `${wordsLeft}/${total} words`;
 }
 
 function onReadingComplete() {
@@ -163,6 +244,10 @@ forwardBtn.addEventListener('click', () => {
 
 closeBtn.addEventListener('click', () => {
     timer.pause();
+    // Save final position before closing
+    if (currentFile) {
+        saveBookmark(currentFile, timer.getCurrentIndex());
+    }
     showUpload();
 });
 
@@ -170,6 +255,21 @@ wpmSlider.addEventListener('input', () => {
     const wpm = parseInt(wpmSlider.value);
     timer.setWPM(wpm);
     wpmDisplay.textContent = `${wpm} WPM`;
+    updateStats(); // Update reading time when WPM changes
+});
+
+// Tap on word display to toggle play/pause
+wordDisplay.addEventListener('click', () => {
+    playBtn.click();
+});
+
+// Stats toggle button
+statsToggleBtn.addEventListener('click', () => {
+    showStats = !showStats;
+    statsContainer.classList.toggle('hidden', !showStats);
+    if (showStats) {
+        updateStats();
+    }
 });
 
 // Progress bar click to seek
@@ -232,6 +332,24 @@ function showLoading(show) {
         loading.classList.add('hidden');
     }
 }
+
+// ============================================
+// Visit Counter
+// ============================================
+
+async function updateVisitCounter() {
+    try {
+        const response = await fetch('https://api.countapi.xyz/hit/rsvp-reader-glitches/visits');
+        const data = await response.json();
+        document.getElementById('visit-count').textContent = data.value.toLocaleString();
+    } catch (error) {
+        console.error('Failed to update visit counter:', error);
+        document.getElementById('visit-count').textContent = '???';
+    }
+}
+
+// Update counter on page load
+updateVisitCounter();
 
 // ============================================
 // PWA Service Worker
