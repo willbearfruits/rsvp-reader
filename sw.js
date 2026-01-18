@@ -44,6 +44,8 @@ self.addEventListener('install', (event) => {
             );
         })
     );
+    // Force the waiting service worker to become the active service worker
+    self.skipWaiting();
 });
 
 // Activate - clean old caches
@@ -55,6 +57,9 @@ self.addEventListener('activate', (event) => {
                     .filter(name => name !== CACHE_NAME)
                     .map(name => caches.delete(name))
             );
+        }).then(() => {
+            // Take control of all pages immediately
+            return self.clients.claim();
         })
     );
 });

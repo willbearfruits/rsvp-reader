@@ -71,6 +71,28 @@ function handleFileSelect(e) {
 }
 
 async function processFile(file) {
+    // File size validation (50MB max)
+    const MAX_FILE_SIZE = 50 * 1024 * 1024;
+    if (file.size > MAX_FILE_SIZE) {
+        alert('File too large. Maximum size is 50MB.');
+        return;
+    }
+
+    // MIME type validation
+    const validMimeTypes = {
+        'application/pdf': true,
+        'application/vnd.openxmlformats-officedocument.wordprocessingml.document': true,
+        'application/epub+zip': true,
+        'text/plain': true,
+        'text/markdown': true,
+        '': true // Empty MIME type allowed (some systems don't set it)
+    };
+
+    if (!validMimeTypes[file.type]) {
+        alert('Invalid file type detected. Please use PDF, DOCX, EPUB, TXT, or MD files.');
+        return;
+    }
+
     if (!isSupported(file)) {
         alert('Unsupported file type. Please use PDF, DOCX, EPUB, TXT, or MD files.');
         return;
