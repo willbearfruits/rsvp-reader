@@ -1,0 +1,362 @@
+/* ============================================
+   RSVP Reader - Dark Theme with Red Accent
+   ============================================ */
+
+:root {
+    --bg: #0a0a0a;
+    --bg-elevated: #141414;
+    --text: #e0e0e0;
+    --text-dim: #666;
+    --accent: #ff2222;
+    --accent-glow: rgba(255, 34, 34, 0.3);
+    --border: #222;
+    --font-mono: 'SF Mono', 'Fira Code', 'Consolas', monospace;
+    --font-sans: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+html, body {
+    height: 100%;
+    overflow: hidden;
+}
+
+body {
+    font-family: var(--font-sans);
+    background: var(--bg);
+    color: var(--text);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+#app {
+    width: 100%;
+    height: 100%;
+    max-width: 100vw;
+    max-height: 100vh;
+    position: relative;
+}
+
+/* ============================================
+   Screens
+   ============================================ */
+
+.screen {
+    display: none;
+    width: 100%;
+    height: 100%;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding: 20px;
+}
+
+.screen.active {
+    display: flex;
+}
+
+/* ============================================
+   Upload Screen
+   ============================================ */
+
+#upload-screen h1 {
+    font-size: 4rem;
+    font-weight: 200;
+    letter-spacing: 0.3em;
+    margin-bottom: 0.25em;
+}
+
+#upload-screen h1 .accent {
+    color: var(--accent);
+}
+
+.tagline {
+    color: var(--text-dim);
+    font-size: 1rem;
+    margin-bottom: 3rem;
+    letter-spacing: 0.1em;
+}
+
+#drop-zone {
+    border: 2px dashed var(--border);
+    border-radius: 12px;
+    padding: 3rem 4rem;
+    text-align: center;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    background: var(--bg-elevated);
+}
+
+#drop-zone:hover,
+#drop-zone.drag-over {
+    border-color: var(--accent);
+    box-shadow: 0 0 30px var(--accent-glow);
+}
+
+.drop-icon {
+    font-size: 3rem;
+    margin-bottom: 1rem;
+    opacity: 0.7;
+}
+
+#drop-zone p {
+    margin-bottom: 0.5rem;
+}
+
+.formats {
+    font-size: 0.8rem;
+    color: var(--text-dim);
+    margin-bottom: 1.5rem !important;
+}
+
+.btn {
+    background: var(--accent);
+    color: white;
+    border: none;
+    padding: 0.75rem 2rem;
+    font-size: 1rem;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    font-weight: 500;
+}
+
+.btn:hover {
+    transform: scale(1.05);
+    box-shadow: 0 0 20px var(--accent-glow);
+}
+
+#loading {
+    text-align: center;
+}
+
+#loading.hidden {
+    display: none;
+}
+
+.spinner {
+    width: 40px;
+    height: 40px;
+    border: 3px solid var(--border);
+    border-top-color: var(--accent);
+    border-radius: 50%;
+    animation: spin 0.8s linear infinite;
+    margin: 0 auto 1rem;
+}
+
+@keyframes spin {
+    to { transform: rotate(360deg); }
+}
+
+/* ============================================
+   Reader Screen
+   ============================================ */
+
+#reader-screen {
+    justify-content: space-between;
+    padding: 2rem;
+}
+
+#word-container {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    position: relative;
+}
+
+#word-display {
+    font-family: var(--font-mono);
+    font-size: clamp(2.5rem, 10vw, 5rem);
+    font-weight: 400;
+    letter-spacing: 0.05em;
+    white-space: nowrap;
+    position: relative;
+}
+
+#word-before,
+#word-after {
+    color: var(--text);
+}
+
+#word-orp {
+    color: var(--accent);
+    text-shadow: 0 0 10px var(--accent-glow);
+    font-weight: 600;
+}
+
+#orp-marker {
+    color: var(--accent);
+    font-size: 1rem;
+    margin-top: 0.5rem;
+    opacity: 0.6;
+}
+
+/* ============================================
+   Progress
+   ============================================ */
+
+#progress-container {
+    width: 100%;
+    max-width: 600px;
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    margin-bottom: 1.5rem;
+}
+
+#progress-bar {
+    flex: 1;
+    height: 4px;
+    background: var(--border);
+    border-radius: 2px;
+    position: relative;
+    overflow: hidden;
+    cursor: pointer;
+}
+
+#progress-bar::after {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 0;
+    height: 100%;
+    width: var(--progress, 0%);
+    background: var(--accent);
+    transition: width 0.1s ease;
+}
+
+#progress-text {
+    font-size: 0.85rem;
+    color: var(--text-dim);
+    min-width: 3rem;
+    text-align: right;
+}
+
+/* ============================================
+   Controls
+   ============================================ */
+
+#controls {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    flex-wrap: wrap;
+    justify-content: center;
+}
+
+.ctrl-btn {
+    background: var(--bg-elevated);
+    border: 1px solid var(--border);
+    color: var(--text);
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.ctrl-btn:hover {
+    border-color: var(--accent);
+    color: var(--accent);
+}
+
+.ctrl-btn.play {
+    width: 64px;
+    height: 64px;
+    font-size: 1.5rem;
+    background: var(--accent);
+    border-color: var(--accent);
+    color: white;
+}
+
+.ctrl-btn.play:hover {
+    transform: scale(1.1);
+    box-shadow: 0 0 20px var(--accent-glow);
+}
+
+.ctrl-btn.play.playing {
+    background: var(--bg-elevated);
+    color: var(--accent);
+}
+
+#wpm-control {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    margin-left: 1rem;
+}
+
+#wpm-slider {
+    width: 120px;
+    accent-color: var(--accent);
+}
+
+#wpm-display {
+    font-size: 0.85rem;
+    color: var(--text-dim);
+    min-width: 5rem;
+}
+
+#close-btn {
+    margin-left: 1rem;
+}
+
+/* ============================================
+   Responsive
+   ============================================ */
+
+@media (max-width: 600px) {
+    #upload-screen h1 {
+        font-size: 2.5rem;
+    }
+    
+    #drop-zone {
+        padding: 2rem;
+        width: 100%;
+    }
+    
+    #controls {
+        gap: 0.5rem;
+    }
+    
+    .ctrl-btn {
+        width: 40px;
+        height: 40px;
+    }
+    
+    .ctrl-btn.play {
+        width: 56px;
+        height: 56px;
+    }
+    
+    #wpm-control {
+        margin-left: 0;
+        margin-top: 0.5rem;
+        width: 100%;
+        justify-content: center;
+    }
+    
+    #wpm-slider {
+        width: 150px;
+    }
+}
+
+/* ============================================
+   Utilities
+   ============================================ */
+
+.hidden {
+    display: none !important;
+}

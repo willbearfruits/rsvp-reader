@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <meta name="theme-color" content="#0a0a0a">
+    <meta name="description" content="RSVP Speed Reader with ORP highlighting">
+    <title>RSVP Reader</title>
+    <link rel="manifest" href="manifest.json">
+    <link rel="icon" type="image/svg+xml"
+        href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>📖</text></svg>">
+    <link rel="stylesheet" href="index.css">
+</head>
+
+<body>
+    <div id="app">
+        <!-- File Upload Screen -->
+        <div id="upload-screen" class="screen active">
+            <h1>RSVP<span class="accent">.</span></h1>
+            <p class="tagline">Speed read anything</p>
+
+            <div id="drop-zone">
+                <div class="drop-icon">📄</div>
+                <p>Drop file here</p>
+                <p class="formats">PDF • DOCX • EPUB • TXT • MD</p>
+                <input type="file" id="file-input" accept=".pdf,.docx,.epub,.txt,.md,.text,.markdown" hidden>
+                <button id="browse-btn" class="btn">Browse Files</button>
+            </div>
+
+            <div id="loading" class="hidden">
+                <div class="spinner"></div>
+                <p>Processing...</p>
+            </div>
+        </div>
+
+        <!-- Reader Screen -->
+        <div id="reader-screen" class="screen">
+            <div id="word-container">
+                <div id="word-display">
+                    <span id="word-before"></span><span id="word-orp"></span><span id="word-after"></span>
+                </div>
+                <div id="orp-marker">▲</div>
+            </div>
+
+            <div id="progress-container">
+                <div id="progress-bar"></div>
+                <span id="progress-text">0%</span>
+            </div>
+
+            <div id="controls">
+                <button id="back-btn" class="ctrl-btn" title="Back 10 words">◀◀</button>
+                <button id="play-btn" class="ctrl-btn play" title="Play/Pause">▶</button>
+                <button id="forward-btn" class="ctrl-btn" title="Forward 10 words">▶▶</button>
+
+                <div id="wpm-control">
+                    <input type="range" id="wpm-slider" min="100" max="1000" value="150" step="25">
+                    <span id="wpm-display">150 WPM</span>
+                </div>
+
+                <button id="close-btn" class="ctrl-btn" title="Close">✕</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- External Libraries (CDN) -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/mammoth/1.6.0/mammoth.browser.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
+
+    <!-- App Modules -->
+    <script type="module" src="app.js"></script>
+</body>
+
+</html>

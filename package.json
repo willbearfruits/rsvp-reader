@@ -1,0 +1,28 @@
+{
+    "name": "rsvp-reader",
+    "version": "1.0.0",
+    "description": "Speed reading app with ORP highlighting",
+    "main": "index.html",
+    "scripts": {
+        "start": "python3 -m http.server 8080",
+        "build": "echo 'No build step needed - vanilla JS'",
+        "cap:add": "npx cap add android",
+        "cap:sync": "npx cap sync",
+        "cap:open": "npx cap open android"
+    },
+    "keywords": [
+        "rsvp",
+        "speed-reading",
+        "spritz",
+        "orp"
+    ],
+    "author": "",
+    "license": "MIT",
+    "devDependencies": {
+        "@capacitor/cli": "^6.0.0"
+    },
+    "dependencies": {
+        "@capacitor/android": "^6.0.0",
+        "@capacitor/core": "^6.0.0"
+    }
+}
