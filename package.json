@@ -5,9 +5,9 @@
     "main": "index.html",
     "scripts": {
         "start": "python3 -m http.server 8080",
-        "build": "echo 'No build step needed - vanilla JS'",
-        "cap:add": "npx cap add android",
-        "cap:sync": "npx cap sync",
+        "build": "mkdir -p www/lib/parsers && cp index.html index.css app.js manifest.json sw.js www/ && cp -r lib/* www/lib/",
+        "cap:add": "npm run build && npx cap add android",
+        "cap:sync": "npm run build && npx cap sync",
         "cap:open": "npx cap open android"
     },
     "keywords": [
@@ -19,7 +19,8 @@
     "author": "",
     "license": "MIT",
     "devDependencies": {
-        "@capacitor/cli": "^6.0.0"
+        "@capacitor/cli": "^6.0.0",
+        "typescript": "^5.9.3"
     },
     "dependencies": {
         "@capacitor/android": "^6.0.0",
