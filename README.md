@@ -4,6 +4,12 @@ Spritz-style speed reading app with Optimal Recognition Point (ORP) highlighting
 
 ![Screenshot](docs/screenshot.png)
 
+## Support
+
+Most of my work stays free and open-source.
+Support early access, live sessions, and workshop-time:
+https://www.patreon.com/Seriousshit
+
 ## Features
 
 - **RSVP Display**: Words shown one at a time, perfectly centered
